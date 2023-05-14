@@ -123,6 +123,15 @@ class Message < ApplicationRecord
     merge_sender_attributes(data)
   end
 
+  def push_llm_data
+    data = {
+      role: sender.is_a?(AgentBot) ? "assistant" : "user",
+      content: content
+    }
+
+    return data
+  end
+
   # TODO: We will be removing this code after instagram_manage_insights is implemented
   # Better logic is to listen to webhook and remove stories proactively rather than trying
   # a fetch every time a message is returned

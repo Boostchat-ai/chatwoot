@@ -63,7 +63,11 @@ class AgentBotListener < BaseListener
     case agent_bot.bot_type
     when 'webhook'
       payload = message.webhook_data.merge(event: method_name)
-      process_webhook_bot_event(agent_bot, payload)
+
+      # Prevent the infinity loop Bot is chatting with Bot
+      if !message.sender.is_a?(AgentBot)
+        process_webhook_bot_event(agent_bot, payload)
+      end
     when 'csml'
       process_csml_bot_event(event.name, agent_bot, message)
     end
