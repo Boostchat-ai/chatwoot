@@ -8,6 +8,7 @@ class Conversations::EventDataPresenter < SimpleDelegator
       id: display_id,
       inbox_id: inbox_id,
       messages: push_messages,
+      llm_messages: llm_messages,
       labels: label_list,
       meta: push_meta,
       status: status,
@@ -23,6 +24,10 @@ class Conversations::EventDataPresenter < SimpleDelegator
 
   def push_messages
     [messages.chat.last&.push_event_data].compact
+  end
+
+  def llm_messages
+    messages.chat.map { |message| message.push_llm_data }
   end
 
   def push_meta
